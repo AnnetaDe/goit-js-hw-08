@@ -100,4 +100,4 @@ galleryImages.forEach(image => {
   });
 });
 
-lightbox.style;
+
