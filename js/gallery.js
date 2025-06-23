@@ -63,13 +63,10 @@ const images = [
     description: "Lighthouse Coast Sea"
   }
 ];
-const container = document.createElement("div");
 
-container.classList.add("container");
 const gallery = document.querySelector(".gallery");
 
-document.querySelector("body").insertBefore(container, gallery);
-container.appendChild(gallery);
+
 
 const createGalleryItem = images.map(item => {
   return `<li class="gallery-item">
@@ -77,27 +74,22 @@ const createGalleryItem = images.map(item => {
       <img class="gallery-image" src="${item.preview}" data-source="${item.original}" alt="${item.description}" />
     </a>
   </li>`;
-});
-gallery.insertAdjacentHTML("afterbegin", createGalleryItem.join(""));
+}).join("");
+gallery.insertAdjacentHTML("beforeend", createGalleryItem);
 
-const galleryImages = document.querySelectorAll(".gallery-image");
+gallery.addEventListener("click", event => {
+  event.preventDefault();
 
-const lightbox = basicLightbox.create(
-  `<div class="modal">
-      <img class= "modal-img"/>
-    </div>`,
-  {
-    closable: true
-  }
-);
+  const target = event.target;
 
-galleryImages.forEach(image => {
-  image.addEventListener("click", event => {
-    event.preventDefault();
-    lightbox.element().querySelector(".modal-img").src = image.dataset.source;
-    lightbox.element().querySelector(".modal-img").alt = image.alt;
-    lightbox.show();
-  });
+  if (target.nodeName !== "IMG") return;
+  const lightbox = basicLightbox.create(`
+    <div class="modal">
+      <img class="modal-img" src="${target.dataset.source}" alt="${target.alt}" />
+    </div>
+  `);
+
+  lightbox.show();
 });
 
 
